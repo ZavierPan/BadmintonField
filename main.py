@@ -10,7 +10,7 @@ from selenium.common.exceptions import TimeoutException
 import constant as cst
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-f", type=int, choices=[0], help="0:中正")
+parser.add_argument("-f", type=int, choices=[0, 1], help="0:中正, 1:信義")
 parser.add_argument("-td", type=str, help="Target date, eg. 2021/3/7")
 parser.add_argument("-pd", type=str, help="Play date, eg. 2021/3/20")
 
@@ -20,6 +20,11 @@ args = parser.parse_args()
 if args.f == 0:
     print(cst.ZHONGZHENG_FIELD_INFO)
     basic_url = cst.ZHONGZHENG_URL
+    login_alert_num = 1
+elif args.f == 1:
+    print(cst.XINYI_FIELD_INFO)
+    basic_url = cst.XINYI_URL
+    login_alert_num = 2
 
 # 執行日期
 target_time = "{}-00-00-00".format(args.td)
@@ -40,7 +45,8 @@ driver = webdriver.Chrome('./chromedriver.exe')
 # 跳至活動中心登入畫面
 driver.get(basic_url + "?module=login_page&files=login",)
 # 關閉Alert視窗
-driver.switch_to_alert().accept()
+for i in range(login_alert_num):
+    driver.switch_to_alert().accept()
 
 # 自動輸入帳密
 
