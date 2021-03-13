@@ -2,58 +2,43 @@ import time
 import argparse
 from datetime import datetime
 
-
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import TimeoutException
 
-
+import constant as cst
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-f", type=int, choices=[0,1,2], help="0:大安")
+parser.add_argument("-f", type=int, choices=[0], help="0:中正")
 parser.add_argument("-td", type=str, help="Target date, eg. 2021/3/7")
 parser.add_argument("-pd", type=str, help="Play date, eg. 2021/3/20")
 
 args = parser.parse_args()
-print("""
-中正活動中心
-已被長租之場地 (2021/3/7更新)
-週六 8~10 ABC
-週六 10~12 AB
-週六 14~16 ABC
-週日 8~10 ABC
-週日 10-12 BC
-
-每周日晚上必搶 周日8~10 D E
-
-# A號場 1112
-# B號場 1113
-# C號場 1114
-# D號場 1115
-# E號場 1116
-""")
 
 
+if args.f == 0:
+    print(cst.ZHONGZHENG_FIELD_INFO)
+    basic_url = cst.ZHONGZHENG_URL
+
+# 執行日期
 target_time = "{}-00-00-00".format(args.td)
 target_time = datetime.strptime(target_time, "%Y/%m/%d-%H-%M-%S")
-# print(target_time)
 
-basic_url = "https://www.cjcf.com.tw/jj01.aspx?module=net_booking&files=booking_place&StepFlag=25&"
-
+# 打球日期
 play_field = int(input("輸入場地編號: ")) #詢問場地選擇
-play_time = int(input("輸入打球時間: ")) #詢問時間
+play_time = int(input("輸入打球時間 (8~22): ")) #詢問時間
 play_date = args.pd
 print("Play Date: ", play_date)
 
-target_url = basic_url + "QPid={}&QTime={}&PT=1&D={}".format(play_field, play_time, play_date)
-print("URL: ", target_url)
+booking_url = basic_url + "?module=net_booking&files=booking_place&StepFlag=25&" + "QPid={}&QTime={}&PT=1&D={}".format(play_field, play_time, play_date)
+print("URL: ", booking_url)
 
 # 打開瀏覽器
 driver = webdriver.Chrome('./chromedriver.exe')
 
 # 跳至活動中心登入畫面
-driver.get("https://www.cjcf.com.tw/jj01.aspx?module=login_page&files=login",)
+driver.get(basic_url + "?module=login_page&files=login",)
 # 關閉Alert視窗
 driver.switch_to_alert().accept()
 
@@ -71,15 +56,16 @@ while len(driver.find_elements_by_id("ContentPlaceHolder1_Panellogin"))!=0:
 while datetime.now() < target_time:
     pass
 
+# 每秒爬一次，共爬三次
 count = 0
 while True:
-    driver.get(target_url)
+    driver.get(booking_url)
     time.sleep(1)
     count += 1
     if count == 3:
         break
 
-    
+# 轉移至訂單
+driver.get(basic_url + "?module=member&files=orderx_mt")
 
-
-driver.get("https://www.cjcf.com.tw/jj01.aspx?module=member&files=orderx_mt")
+time.sleep(600)
