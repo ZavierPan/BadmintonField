@@ -63,13 +63,8 @@ while datetime.now() < target_time:
     pass
 
 # 每秒爬一次，共爬三次
-count = 0
-while True:
-    driver.get(booking_url)
-    time.sleep(1)
-    count += 1
-    if count == 3:
-        break
+driver.get(booking_url)
+
 
 # 轉移至訂單
 driver.get(basic_url + "?module=member&files=orderx_mt")
