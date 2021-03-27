@@ -18,6 +18,17 @@ ZHONGZHENG_FIELD_INFO = """
 
 ZHONGZHENG_URL = "https://www.cjcf.com.tw/jj01.aspx"
 
+# [8am, 9am, 10am, 11am]
+ZHONGZHENG_FIELD_XPATH_IDs = {'A': [12, 17, 22, 27], 
+                            'B': [13, 18, 23, 28],
+                            'C': [14, 19, 24, 29],
+                            'D': [15, 20, 25, 30],
+                            'E': [16, 21, 26, 31]}
+ZHONGZHENG_FIELD_ID = {'A': 1112, 
+                        'B': 1113,
+                        'C': 1114,
+                        'D': 1115,
+                        'E': 1116}
 
 XINYI_FIELD_INFO = """
 信義運動中心
@@ -39,3 +50,13 @@ XINYI_FIELD_INFO = """
 """
 
 XINYI_URL = "https://scr.cyc.org.tw/tp04.aspx"
+
+# [8am, 9am, 10am, 11am]
+XINYI_FIELD_XPATH_IDs = {'A': [10, 14, 18, 22], 
+                            'B': [11, 15, 19, 23],
+                            'C': [12, 16, 20, 24],
+                            'D': [13, 17, 21, 25]}
+XINYI_FIELD_ID = {'A': 1140, 
+                        'B': 1141,
+                        'C': 1144,
+                        'D': 1145}
